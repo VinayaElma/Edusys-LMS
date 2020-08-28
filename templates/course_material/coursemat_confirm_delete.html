@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Delete Course Material{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'course_materials:view_subjects' %}">Course Materials</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'course_materials:view_course_materials' subject.pk %}">{{ subject.name }}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>Delete</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+
+{% block content %}
+    <h5 class="heading-title p-5">{{ subject.name }} - Delete course material no {{ course_material.coursematerial_no }}</h5>
+    <div class="main-content" style="padding-top: 0px">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <form method="POST">
+                            <h5>Are you sure you want to delete course material no {{course_material.coursematerial_no}}</h5>
+                            {% csrf_token %}
+                            <br><br>
+                            <button type="submit" class="btn btn-danger">Yes Delete</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href ="{%url 'course_materials:view_teacher_courses' subject.pk %}" class="button">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_subjects' %}">Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_assignments' subject.pk %}"> {{subject.name}}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:detail_assignments' subject.pk assignment.pk %}">{{subject.name}} Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_answers' subject.pk assignment.pk question.pk %}">Assignment-{{ assignment.assignment_no }}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>Answers</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+   {% block content %}
+
+<h5 class="heading-title p-5 text-center">ASSIGNMENT-{{ assignment.assignment_no }}   ANSWERS</h5>
+     <div class="main-content" style="padding-top: 0px">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid" style=" max-width: 970px;>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>SUBMISSIONS</th>
+                                                <th >CHECK</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                         {% for answer in answers|dictsortreversed:"created_date" %}
+                                            <tr>
+                                                {% if answer.document %}
+                                                  <td>
+                                                      <a href="{% url 'assignments:marks_upload' subject.pk assignment.pk question.pk answer.pk %}">{{ answer.student.username }} </a>
+                                                      <p><i>{{ answer.created_date }}</i></p>
+                                                  </td>
+                                                  {% if answer.marks is not None %}
+                                                      <td>
+                                                          <img src="/static/images/assignments/correct.png"  width="30px" height="30px" />
+                                                      </td>
+                                                  {% else %}
+                                                      <td>
+                                                          <img src="/static/images/assignments/wrong.jpeg" width="30px" height="30px" />
+                                                      </td>
+                                                  {% endif %}
+                                                {% endif %}
+                                            </tr>
+                                            {% empty %}
+                                                <div class="alert alert-danger m-2 text-center">
+                                                        <strong>Sorry, no answers found</strong>
+                                                </div>
+                                         {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+     </div>
+
+
+<div class="p-2" style="float: right">
+    {% include 'includes/pagination.html' %}
+</div>
+    {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

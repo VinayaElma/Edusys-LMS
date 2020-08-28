@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_subjects' %}">Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_assignments' subject.pk %}"> {{subject.name}}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:delete_assignments' subject.pk assignment.pk %}">{{subject.name}} Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>Delete</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+{% block content %}
+  <div class="container">
+     <br/>
+     <br/>
+     <form method="POST">
+        <p>Are you sure you want to delete the assignment {{assignment.assignment_no}} ?</p>
+        <br/>
+          {% csrf_token %}
+         <div>
+            <button type="submit" class = "btn btn-danger active" style="padding:10px;">Confirm</button>
+            <a href ="{%url 'assignments:view_assignments' subject.pk %}" class="btn btn-primary active">Cancel</a>
+         </div>
+    </form>
+  </div>
+
+
+{% endblock %}

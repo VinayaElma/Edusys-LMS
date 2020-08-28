@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ subject.name }} - Discusson Forum
+{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item">
+        <a href="{% url 'home' %}">Home</a>
+    </li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:forum' %}">Discussion Forum</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">{{ subject.name }}</li>
+{% endblock %}
+
+{% load humanize %}
+
+{% block content %}
+    <h1 class="text-center p-4 bg-warning">{{ subject.name }}</h1>
+
+    <div class="m-4">
+        <a href="{% url 'forum:new_topic' subject.code %}" class="btn btn-primary">+ Create New Topic</a>
+        <span class="float-right p-1">
+            <form action="{% url 'forum:search_topics' subject.code %}" method="GET" class="form-inline">
+                <input class="form-control" name="q" type="text" placeholder="Search for a topic" value="{{ request.GET.q }}">
+                <label for="q" class="ml-2"></label>
+                <button formaction="{% url 'forum:search_topics' subject.code %}"><i class="zmdi zmdi-search zmdi-hc-2x "></i></button>
+            </form>
+        </span>
+    </div>
+    {% if request.GET.q %}
+        <h3 class="ml-2 mb-3">Search Results for "{{ request.GET.q }}":</h3>
+    {% endif %} 
+    <table class="table">
+        {% if topics %}
+        <thead class="thead-dark">
+            <tr>
+                <th>Topic</th>
+                <th class="text-center">Created by</th>
+                <th class="text-center">Replies</th>
+                <th class="text-center">Views</th>
+                <th class="text-center">Last Updated</th>
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody>
+            {% for topic in topics %}
+            <tr>
+                <td><a href="{% url 'forum:topic_comments' topic.subject.code topic.pk %}">{{ topic.description }}</a></td>
+                <td class="text-center">{{ topic.created_by.username }}</td>
+                <td class="text-center">{{ topic.replies }}</td>
+                <td class="text-center">{{ topic.views }}</td>
+                <td class="text-center">{{ topic.modified_date|naturaltime }}</td>
+            </tr>
+            {% empty %}
+                {% if request.GET.q %}
+                    <div class="alert alert-danger m-2 text-center">
+                        <strong>Sorry, no topics or comments found containing "{{ request.GET.q }}"</strong>
+                    </div>
+                {% else %}
+                <div class="alert alert-info m-2 text-center">
+                    <h2>No topics in this forum yet</h2><br>
+                    <h3>Be the first one to create a new topic!</h3>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'includes/pagination.html' %}
+    
+{% endblock %}

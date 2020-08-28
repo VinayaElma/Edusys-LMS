@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Materials{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'course_materials:view_subjects' %}">Course Materials</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>{{ subject.name }}</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+
+
+{% block add-button %}
+    <button class="au-btn au-btn-icon au-btn--green" >
+    <i class="zmdi zmdi-plus"></i><a style="color: white" href="{% url 'course_materials:new_materials' subject.pk %}">Course Material</a>
+    </button>
+{% endblock add-button %}
+
+ {% block content %}
+     <h1 class="text-center p-4 bg-warning">Course Materials - {{ subject.name }}</h1>
+      <span style="float: right" class="p-1">   <form action="{% url 'course_materials:search_results_teacher' subject.pk %}" method="get">
+            <input class="form-control" name="q" type="text" placeholder="Search..." value="{{ request.GET.q }}">
+        </form>
+    </span>
+    <br>
+    <br>
+    {% if request.GET.q %}
+        <h5 class="ml-2 mb-3">Search Results for "{{ request.GET.q }}":</h5>
+    {% endif %}
+     <br>
+     <div class="main-content" style="padding-top: 0px">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>Course Material No</th>
+                                                <th>Description</th>
+                                                <th>Document Link</th>
+                                                <th>Last Modified</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if search_result %}
+                                         {% for course_material in object_list %}
+                                            <tr>
+                                                <td>{{ course_material.coursematerial_no }}</td>
+                                                <td>{{ course_material.description }}</td>
+                                                <td><a href="{{ MEDIA_URL }}{{ course_material.get_document_url }}" target="_blank">{{ course_material.doc_name }}</a></td>
+                                                <td>{{ course_material.modified_date }}</td>
+                                                <td><button type="button" class="btn btn-warning"><a style="color: white" href="{% url 'course_materials:update_materials' subject.pk course_material.pk %}">Edit</a></button></td>
+                                                <td><button type="button" class="btn btn-danger"><a style="color: white" href="{% url 'course_materials:delete_material' subject.pk course_material.pk %}">Delete</a></button></td>
+                                            </tr>
+                                             {% empty %}
+                                                {% if search_result %}
+                                                    <div class="alert alert-danger m-2 text-center">
+                                                        <strong>Sorry, no course materials found containing "{{ search_result }}"</strong>
+                                                    </div>
+                                                {% endif %}
+                                         {% endfor %}
+                                            {% else %}
+                                            {% for course_material in subject.course_materials.all|dictsortreversed:"modified_date" %}
+                                            <tr>
+                                                <td>{{ course_material.coursematerial_no }}</td>
+                                                <td>{{ course_material.description }}</td>
+                                                <td><a href="{{ MEDIA_URL }}{{ course_material.get_document_url }}" target="_blank">{{ course_material.doc_name }}</a></td>
+                                                <td>{{ course_material.modified_date }}</td>
+                                                <td><button type="button" class="btn btn-warning"><a style="color: white" href="{% url 'course_materials:update_materials' subject.pk course_material.pk %}">Edit</a></button></td>
+                                                <td><button type="button" class="btn btn-danger"><a style="color: white" href="{% url 'course_materials:delete_material' subject.pk course_material.pk %}">Delete</a></button></td>
+                                            </tr>
+                                                {% empty %}
+                                                <div class="alert alert-danger m-2 text-center">
+                                                        <strong>Sorry, no course materials found</strong>
+                                                </div>
+                                         {% endfor %}
+                                        {% endif %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+     </div>
+<div class="p-2" style="float: right">
+    {% include 'includes/pagination.html' %}
+</div>
+
+ {% endblock %}

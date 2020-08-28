@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active"><label>{{quiz.name}}</label></li>
+
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container-fluid mt-2">
+    {% if quiz.owner == request.user %}
+    {% if quiz.date >= now %}
+    <a href="{% url 'quiz:question_add' quiz.pk %}" class="btn btn-success mb-4">Add Questions</a>
+    {%endif%}
+    {%endif%}
+    {% for quest in questions %}
+    <div class="container-fluid shadow p-3 mb-5 bg-white rounded">
+        <p>Question:<br><strong>{{ forloop.counter }}) {{ quest.question}}</strong></p><br>
+        <p>Choices:</p><br>
+        {% for choic in choices %}
+        {% if choic.question == quest %}
+        <label> {% if choic.is_correct == True %}<span style="font-size: 25px;" ><strong>&#9745;</strong></span>{%else%}<span style="font-size: 25px;" >&#10063;</span>{%endif%}{{choic.choice}}</label> <br>
+        {%endif%}
+        {%endfor%}
+        {% if quiz.owner == request.user %}
+        {% if quiz.date >= now %}
+        <a href="{% url 'quiz:question_delete' quiz.pk quest.pk %}" class="btn btn-danger">Delete</a>
+        {%endif%}
+        {%endif%}
+    </div>
+    {%empty%}
+    <br><label class="bg-light text-center font-italic">No question added  yet.</label>
+
+    {%endfor%}
+
+    
+</div>
+<div class="mt-2 mr-2" style="float:right">
+    {% include 'includes/pagination.html' %}
+    </div>
+
+{% endblock content %}

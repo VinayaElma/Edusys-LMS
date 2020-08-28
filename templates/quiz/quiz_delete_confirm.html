@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+  <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+  <span>/</span>
+</li>
+<li class="list-inline-item active">
+  <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+
+<li class="list-inline-item">Quiz delete</li>
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container">
+  <h2 class="mb-3">Confirm deletion</h2>
+  <p class="lead">Are you sure you want to delete the quiz <strong>"{{ quiz.name }}"</strong></p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger btn-lg">Yes, I'm sure</button>
+    <a href="{% url 'quiz:quiz_home' %}" class="btn btn-outline-secondary btn-lg" role="button">No</a>
+  </form>
+</div>
+
+
+{% endblock content %}

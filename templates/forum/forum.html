@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} Discussion Forum {% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item">
+        <a href="{% url 'home' %}">Home</a>
+    </li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">Discussion Forum</li>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center p-4 bg-warning">Discussion Forum</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Subjects</th>
+                    <!--th class="text-center">Comments</th-->
+                    <th class="text-center">Topics</th>
+                    <!--th class="text-center">Last Post</th-->
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td>
+                        <a href="{% url 'forum:topics' subject.code %}">{{ subject.name }}</a>
+                        <small class="text-muted d-block">{{ subject.code }}</small>
+                    </td>
+                    <!--td class="text-center">0</td-->
+                    <td class="text-center">{{ subject.topics.count }}</td>
+                    <!--td class="text-center">-</td-->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Edit Profile
+{% endblock %}
+
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home' %}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'profile' %}">Profile</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">Edit profile</li>
+{% endblock breadcrumb-content %}
+
+{% block content %}
+<h5 class="heading-title p-5">Edit profile</h5>
+    <div class="main-content" style="padding-top: 0px">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            {% for field in form %}
+                                <div class="form-group">
+                                {{ field.label_tag }}
+
+                                {% if form.is_bound %}
+                                {% if field.errors %}
+
+                                {% render_field field class="form-control is-invalid" %}
+                                {% for error in field.errors %}
+                                <div class="invalid-feedback">
+                                  {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            {% else %}
+                              {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+                          {% else %}
+                            {% render_field field class="form-control" %}
+                          {% endif %}
+
+                          {% if field.help_text %}
+                            <small class="form-text text-muted">
+                              {{ field.help_text }}
+                            </small>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                        <button type="submit" class="btn btn-success">Update</button>
+                      </form>
+                </div>
+            </div>
+         </div>
+    </div>
+{% endblock %}

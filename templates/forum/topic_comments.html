@@ -1,0 +1,59 @@
+<a id='home'></a>
+{% extends 'base.html' %}
+{% block title %}
+    {{ topic.description }}
+{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item">
+        <a href="{% url 'home' %}">Home</a>
+    </li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:forum' %}">Discussion Forum</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:topics' topic.subject.code %}">{{ topic.subject }}</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">{{ topic.get_truncated_description }}</li>
+{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="mx-3">
+        <h1>{{ topic.description }}
+            {% if topic.created_by == user %}
+                <span class="float-right">
+                    <a href="{% url 'forum:edit_topic' topic.subject.code topic.pk %}" class="btn btn-outline-primary btn-lg" role="button"><i class="zmdi zmdi-edit"></i> Edit Topic</a>
+                    <button onclick="confirmDeleteTopic()" class="btn btn-outline-danger btn-lg" role="button">Delete Topic <i class="fa fa-trash"></i></button>
+                </span>
+            {% endif %}
+        </h1>
+        
+        <div class="text-muted">Created by <span class="text-primary ">{{ topic.created_by.username }}</span> on {{ topic.created_date }}</div>
+    </div>
+    <hr>         
+            
+    {% include 'forum/comments_list.html' %}
+    <a id="reply"><h3 class="mx-5 mt-5 mb-3">Your Reply</h3></a>
+        <form method="POST" class="mx-5" novalidate>
+            {% csrf_token %}
+            {% include 'includes/form.html' %}
+        <!-- {{ form.as_p }}-->
+            <button type="submit" class="btn btn-success btn-block mb-5">Post Comment</button>
+        </form>
+        <div class="mr-5 mb-3 text-right">
+            <a href="#home" class="btn btn-outline-primary" role="button">Back to top</a>
+        </div> 
+        <script>
+            function confirmDeleteTopic() {
+              if (confirm("Are you sure you want to delete this topic? All comments will be lost!")) {
+               window.location.href = "{% url 'forum:delete_topic' topic.subject.code topic.pk %}"
+              }
+            
+            }
+        </script>
+{% endblock %}

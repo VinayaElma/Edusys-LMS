@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_subjects' %}">Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_assignments' subject.pk %}"> {{subject.name}}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>{{subject.name}} Assignments</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+   {% block content %}
+
+     <div class="main-content" style="padding-top: 20px">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid" style=" max-width: 1200px;>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning text-center">
+                                        <thead>
+                                            <tr>
+                                                {% if user.user_type == 'teacher' %}
+                                                    <th>ASSIGNMENTS</th>
+                                                    <th>
+                                                    <button type="button" class="btn btn-success btn-lg active"  style="float:right;">
+                                                        <a href="{% url 'assignments:new_assignments' subject.pk %}" style="color:white;"> Add </a>
+                                                    </button>
+                                                    </th>
+                                                {% else %}
+                                                    <th>ASSIGNMENTS</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                         {% for assignment in assignments|dictsortreversed:"created_date" %}
+                                            <tr>
+                                              <td>
+                                                  <a href="{% url 'assignments:detail_assignments' subject.pk assignment.pk %}">Assignment-{{ assignment.assignment_no }}</a>
+                                                  <p><i>{{ assignment.created_date }}</i></p>
+                                              </td>
+                                                {% if user.user_type == 'teacher' %}
+                                                <td>
+                                                  <button type="button" class="btn btn-danger active"  style="float:right; margin:5px;">
+                                                    <a href="{% url 'assignments:delete_assignments' subject.pk assignment.pk %}" style="color:white;"> Delete </a>
+                                                  </button>
+
+                                                  <button type="button" class="btn btn-warning active"  style="float:right; margin:5px;">
+                                                    <a href="{% url 'assignments:update_assignments' subject.pk assignment.pk %}" style="color:white;"> Edit </a>
+                                                  </button>
+                                                </td>
+                                                {% endif %}
+                                            </tr>
+                                            {% empty %}
+                                                <div class="alert alert-danger m-2 text-center">
+                                                        <strong>Sorry, no assignments found</strong>
+                                                </div>
+                                         {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+     </div>
+
+
+
+    <div class="p-2" style="float: right">
+        {% include 'includes/pagination.html' %}
+    </div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

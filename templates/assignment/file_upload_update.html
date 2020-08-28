@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_subjects' %}">Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_assignments' subject.pk %}"> {{subject.name}}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:new_assignments' subject.pk %}">{{subject.name}} Assignments</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <p>New</p>
+    </li>
+{% endblock breadcrumb-content %}
+
+{% block content %}
+    <div class="main-content" style="padding-top: 40px">
+        <div class="section__content section__content--p30">
+              <div class="container">
+                  <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                              {{ field.label_tag }}
+                              {% if form.is_bound %}
+                                {% if field.errors %}
+                                  {% render_field field class="form-control is-invalid" %}
+                                  {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                      {{ error }}
+                                    </div>
+                                  {% endfor %}
+                                {% else %}
+                                  {% render_field field class="form-control is-valid" %}
+                                {% endif %}
+                              {% else %}
+                                {% render_field field class="form-control" %}
+                              {% endif %}
+
+                              {% if field.help_text %}
+                                <small class="form-text text-muted">
+                                  {{ field.help_text }}
+                                </small>
+                              {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div style="text-align:center">
+                            <button type="submit" class="btn btn-success btn-lg" >Update</button>
+                        </div>
+                  </form>
+              </div>
+        </div>
+    </div>
+{% endblock %}

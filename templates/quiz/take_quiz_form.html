@@ -1,0 +1,60 @@
+{%extends 'base.html' %}
+
+{% block stylesheet %}
+<style type="text/css">
+    input[type="radio"] {
+  position: absolute;
+  cursor: pointer;
+}
+
+label {
+  position: relative;
+  cursor: pointer;
+  padding-left: 30px;
+  display: inline-block;
+  line-height: 1.6;
+  margin-right: 15px
+}
+
+
+input[type="radio"]:checked~span:after {
+  display: block;
+}
+
+input[type="radio"]:focus~span {
+  outline: 2px solid orange;
+}
+    
+</style>
+{% endblock %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">TakeQuiz</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">new quiz</li>
+{% endblock breadcrumb-content %}
+
+{%block content%}
+<div class="container-fluid">
+   <p>Question:</p><p class="lead"> {{ question.question }}</p>
+</div>
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Submit&Next</button>
+</form>
+
+{%endblock content%}

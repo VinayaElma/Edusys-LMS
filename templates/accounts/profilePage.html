@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home' %}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">Profile</li>
+{% endblock breadcrumb-content %}
+
+{% block content %}
+    <h1 class="heading-title p-5">Profile</h1>
+    <div class="main-content" style="padding-top: 0px">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="d-flex float-right mt-3 login_container"><br>
+                    <a href="editprofile" class="btn btn-info" role="button">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
+                        </svg>
+                        Edit Profile</a>
+                </div>
+            <table>
+                    <tr>
+                        <td><b>Username:</b> </td>
+                        <td>{{ user }}</td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td><b>First Name: </b></td>
+                        <td>{{ user.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Last Name: </b></td>
+                        <td>{{ user.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Email: </b></td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Position: </b></td>
+                        <td>{{ user.user_type }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Phone: </b></td>
+                        <td>{{ user.phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Date Of Birth:</b> </td>
+                        <td>{{ user.date_of_birth }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Year of admission: </b> </td>
+                        <td>{{ user.year_of_admission }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Department: </b></td>
+                        <td>{{ user.department }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Semester: </b></td>
+                        <td>{{ user.semester }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Subjects: </b></td>
+                        <td>{{ user.subjects.all|join:", " }}</td>
+                    </tr>
+            </table>
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container-fluid">
+    <h2>Quiz</h2>
+    <div class="m-3">
+        {% if request.user.user_type == 'teacher' %}
+        
+            <a href="{% url 'quiz:newquiz'%}" type="button" class="btn btn-md btn-success">Add Quiz</a>
+        
+        {%else%}
+        
+            <a href="{% url 'quiz:taken_quiz_list'%}" type="button" class="btn btn-md btn-info ml-2">View Quiz
+                results</a>
+        
+        {%endif%}
+        <span class="float-right p-1 md-3">
+            <form action="{% url 'quiz:quiz_search' %}" method="GET" class="form-inline">
+                <input class="form-control" name="q" type="text" placeholder="Search for a Quiz"
+                    value="{{ request.GET.q }}">
+                <label for="q" class="ml-2"></label>
+                <button formaction="{% url 'quiz:quiz_search' %}"><i class="zmdi zmdi-search zmdi-hc-2x "></i></button>
+            </form>
+        </span>
+    </div>
+    {% if request.GET.q %}
+    <h3 class="ml-2 mb-3">Search Results for "{{ request.GET.q }}":</h3>
+    {% endif %}
+    <table class="table">
+        <thead>
+            <tr>
+                
+                <th scope="col">Quiz-name</th>
+                <th scope="col">Subject</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizes%}
+            <tr>
+                
+                <td>{{quiz.name}}</td>
+                <td style="text-transform: uppercase;">{{quiz.subject.name}}</td>
+
+                <td><a href="{% url 'quiz:quizconf' quiz.pk%}" class="btn btn-outline-primary">Open</a></td>
+                {% if quiz.owner == request.user %}
+                <td><a href="{% url 'quiz:quiz_delete' quiz.pk%}" class="btn btn-danger">Delete</a></td>
+                {%endif%}
+            </tr>
+            {% empty %}
+            {% if request.GET.q %}
+            <div class="alert alert-danger m-2 text-center">
+                <strong>Sorry, no quiz found named "{{ request.GET.q }}"</strong>
+            </div>
+            {% else %}
+            <tr>
+                <td class="bg-light text-center font-italic" colspan="3">No quiz uploaded yet.</td>
+            </tr>
+            {%endif%}
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+
+</div>
+<div class="mt-2 mr-2" style="float:right">
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock content %}

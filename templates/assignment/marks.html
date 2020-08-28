@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+      <a href="{% url 'home' %}">Home</a>
+     </li>
+    <li class="list-inline-item seprate">
+      <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:subjects' %}">Marks</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+      <a href="{% url 'assignments:view_marks' subject.pk %}">{{ subject.name }}</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+{% if user.user_type == 'student' %}
+    <li class="list-inline-item active">
+      <p>{{ subject.name }} Marks</p>
+    </li>
+{% else %}
+    <li class="list-inline-item active">
+      <p>{{ subject.name }} Assignments</p>
+    </li>
+{% endif %}
+{% endblock breadcrumb-content %}
+
+{% block content %}
+    {% if user.user_type == 'student' %}
+    <h5 class="heading-title p-5 text-center">MARKS</h5>
+         <div class="main-content" style="padding-top: 0px">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid" style=" max-width: 970px;>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive table--no-card m-b-30">
+                                        <table class="table table-borderless table-striped table-earning text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th>ASSIGNMENTS</th>
+                                                    <th>MARKS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for answer in answers|dictsortreversed:"modified_date" %}
+                                                {% if answer.marks is not None %}
+                                                     <tr>
+                                                         <td> Assignment - {{ answer.question.assignment.assignment_no }}</td>
+                                                         <td> {{ answer.marks }} / {{ answer.question.assignment.marks }}  </td>
+                                                     </tr>
+                                                {% endif %}
+                                            {% empty %}
+                                                <div class="alert alert-danger m-2 text-center">
+                                                        <strong>Sorry, no marks found</strong>
+                                                </div>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+         </div>
+
+    {% else %}
+
+    <h5 class="heading-title p-5 text-center">ASSIGNMENTS</h5>
+         <div class="main-content" style="padding-top: 0px">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid" style=" max-width: 970px;>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive table--no-card m-b-30">
+                                        <table class="table table-borderless table-striped table-earning text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th>ASSIGNMENTS</th>
+                                                    <th>TOTAL MARKS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for assignment in answers|dictsortreversed:"created_date" %}
+                                                 <tr>
+                                                     <td>
+                                                         <a href="{% url 'assignments:list_marks' subject.pk assignment.pk %}">Assignment - {{ assignment.assignment_no }}</a>
+                                                     </td>
+                                                     <td>
+                                                        {{ assignment.marks }}
+                                                     </td>
+                                                 </tr>
+                                                 {% empty %}
+                                                    <div class="alert alert-danger m-2 text-center">
+                                                            <strong>Sorry, no assignments found</strong>
+                                                    </div>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+    <div class="p-2" style="float: right">
+        {% include 'includes/pagination.html' %}
+    </div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

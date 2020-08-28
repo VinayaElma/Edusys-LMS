@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Start a New Topic
+{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="list-inline-item separate"><span>/</span></li>
+    <li class="list-inline-item"><a href="{% url 'forum:forum' %}">Discussion Forum</a></li>
+    <li class="list-inline-item separate"><span>/</span></li>
+    <li class="list-inline-item"><a href="{% url 'forum:topics' subject.code %}">{{ subject.name }}</a></li>
+    <li class="list-inline-item separate"><span>/</span></li>
+    <li class="list-inline-item active">Start New Topic</li>
+{% endblock %}
+
+{% block content %}
+    <form method="POST" class="mx-5" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+    <!-- {{ form.as_p }}-->
+        <button type="submit" class="btn btn-success">Post</button>
+    </form>
+
+
+{% endblock content %}

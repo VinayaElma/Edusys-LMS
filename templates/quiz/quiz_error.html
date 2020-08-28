@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">Date-error
+</li>
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container-fluid">
+    <p>
+        <div class="shadow p-3 mb-5 bg-white rounded mt-4">
+            <strong>Attempt on Specified Date</strong>
+            <a href="{% url 'quiz:quiz_home'%}" class="btn btn-success">Back to quiz-home</a>
+        </div>
+    </p>
+
+</div>
+
+
+{% include 'includes/pagination.html' %}
+
+{% endblock content %}

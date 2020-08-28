@@ -1,0 +1,84 @@
+{%extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active"><a href="#">Newquestion</a></li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">new quiz</li>
+{% endblock breadcrumb-content %}
+
+{%block content%}
+<form id="form_check" class="form-horizontal" method="POST" action="">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-2">
+            <label>Question</label>
+        </div>
+        <div class="col-6">
+            <div class="input-group">
+                {{questionform.question}}
+            </div>
+        </div>
+    </div>
+    <br><br>
+    {{ formset.management_form }}
+    {% for form in formset %}
+    <div class="row ">
+        <div class="col-2">
+            <label>Choice</label>
+        </div>
+        <div class="col-4">
+            <div class="input-group">
+                {{form.choice}}
+
+
+            </div>
+
+        </div>
+
+        <div class="col">
+            {{form.is_correct}}
+        </div>
+
+    </div>
+    <br>
+
+    {% endfor %}
+    <div class="row ">
+        <div class="col-4 offset-2">
+            <button type="submit" class="btn btn-block btn-primary">Submit question</button>
+        </div>
+    </div>
+</form>
+<div class="container-fluid">
+    <a href="{% url 'quiz:question_list' quiz.pk %}" type="button" class="btn btn-sm btn-success">Submit Quiz</a>
+</div>
+{%endblock content%}
+{% block script %}
+<script>
+$('#form_check').on('submit', function (e) {
+    if ($("input[type=checkbox]:checked").length == 0) {
+        e.preventDefault();
+        alert('mark atleast ONE as correct');
+        return false;
+    }
+    if ($("input[type=checkbox]:checked").length > 1) {
+        e.preventDefault();
+        alert('mark only ONE as correct');
+        return false;
+    }
+  });
+</script>
+{% endblock script %}

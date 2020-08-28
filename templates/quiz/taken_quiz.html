@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">Taken quizes</li>
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container">
+
+    <table class="table mb-0">
+        <thead>
+            <tr>
+                <th>Quiz</th>
+
+                <th>Score</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for taken_quiz in taken_quizzes %}
+            <tr>
+                <td style="text-transform: capitalize;"><a href="{% url 'quiz:after_quiz' taken_quiz.quiz.pk %}">{{ taken_quiz.quiz.name }}</a></td>
+                
+                <td>{{ taken_quiz.score }}</td>
+                <td>{{ taken_quiz.qcount }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td class="bg-light text-center font-italic" colspan="3">You haven't completed any quiz yet.</td>
+            </tr>
+
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class=" mt-2 mr-2" style="float: right;">
+{% include 'includes/pagination.html' %}
+</div>
+{% endblock content %}

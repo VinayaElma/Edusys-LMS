@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Comment{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item">
+        <a href="{% url 'home' %}">Home</a>
+    </li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:forum' %}">Discussion Forum</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:topics' comment.topic.subject.code %}">{{ comment.topic.subject }}</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item"><a href="{% url 'forum:topic_comments' comment.topic.subject.code comment.topic.pk %}">{{ comment.topic.get_truncated_description }}</a></li>
+    <li class="list-inline-item separate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">Edit Comment</li>
+
+{% endblock %}
+
+{% block content %}
+  <form method="post" class="mx-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Update</button>
+    <a href="{% url 'forum:topic_comments' comment.topic.subject.code comment.topic.pk %}" class="btn btn-outline-danger" role="button">Cancel</a>
+  </form>
+{% endblock %}

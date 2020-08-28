@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active"><a href="{% url 'quiz:quizconf' quiz.pk%}" style="text-transform: capitalize;">{{quiz.name}} -details</a></li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active"><label>Result</label></li>
+
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="container-fluid mt-2">
+    <h2 style="text-transform: capitalize;">{{quiz.name}}</h2><br>
+    
+    <h4>Your score : {{ scores.score }}/{{ qcount }}</h4><br>
+
+    {% for quest in questions %}
+    <div class="container-fluid shadow p-3 mb-5 bg-white rounded">
+        <p>Question:<br><strong>{{ forloop.counter }}) {{ quest.question}}</strong></p><br>
+        <p>Choices:</p>
+        {% for choic in choices %}
+        {% if choic.question == quest %}
+        <label> {% if choic.is_correct == True %}<span style="font-size: 25px;" ><strong>&#9745;</strong></span>{%else%}<span style="font-size: 25px;" >&#10063;</span>{%endif%} <span style="font-size: 20px;"> {{choic.choice}}</span></label> <br>
+        {%endif%}
+        {%endfor%}
+        {% for answ in answers %}
+        {% if answ.student.user == request.user and answ.answer.question == quest %}
+        <br><label style="font-size: 20px;">Your answer: <strong>{{answ.answer.choice}}</strong></label>
+        {%endif%}
+        {%empty%}
+        <br><label>You haven't answerred</label>
+        {%endfor%}
+    </div>
+
+    {%empty%}
+    <br><label class="bg-light text-center font-italic">No question added yet.</label>
+
+    {%endfor%}
+
+
+</div>
+
+{% endblock content %}

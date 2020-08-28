@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+
+{% block breadcrumb-content %}
+{% endblock breadcrumb-content %}
+
+
+{% block body%}
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-sidebar2 p-3"  style="background-color: #426ec7" >
+
+      <div class="container">
+          <a class="navbar-brand" href="{% url 'home' %}">                   
+            <img src="{% static 'images/icon/edusys-logo.png' %}" alt="Edusys logo" class="w-50">
+          </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}" >Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+    <div class="main-content" style="padding-top: 80px">
+        <div class="account2">
+                    <div class="image img-cir img-120" style="border-radius: 50%;height: 200px;width: 200px">
+                        {% if user.profile_pic %}
+                                <img src="{{ request.user.profile_pic.url }}" alt="Profile pic" />
+                        {% else %} 
+                                <img src="{% static 'images/avatar.svg' %}" alt="Default user" />
+                        {% endif %}
+                    </div>
+                    <h4 class="name">{{ user.username }}</h4>
+        </div>
+
+        <br>
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="fas fa-copy"></i>  Assignments</h3>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'assignments:view_subjects' %}">View Assignments</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="far fa-id-card"></i>  Marks</h3>
+
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'assignments:subjects' %}">View Marks</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="fas fa-tasks"></i>  Quiz</h3>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'quiz:quiz_home'%}">View Quizzes</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="fas fa-comment-alt"></i> Discussion Forum</h3>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'forum:forum' %}">View Forum</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="far fa-window-maximize"></i>  Course Materials</h3>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'course_materials:view_subjects' %}">View Course Materials</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="card">
+
+                                    <div class="card-body">
+                                        <h3 style="text-align: center"><i class="fas fa-chart-bar"></i>  Announcements</h3>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                            content.
+                                        </p>
+                                    </div>
+                                    <div class="card-footer" style="text-align: center">
+                                        <a class="btn btn-primary" role="button" href="{% url 'announcements:view_announcements' %}">View Announcements</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+    </div>
+    </div>
+{% endblock body %}

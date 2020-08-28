@@ -1,0 +1,61 @@
+{% load static %}
+{% for comment in comments %}
+    <div class="card mb-2 {% if forloop.first %}mx-3 border-danger rounded-bottom{% else %}mx-5 border-dark {% endif %}">
+        {% if forloop.first %}
+            <div class="card-header bg-danger py-2"></div>
+        {% endif %}
+        <div class="card-body text-dark p-3">
+            <div class="row">
+                <div class="col-1 p-2">
+                    {% if comment.created_by.profile_pic %}
+                        <img src="{{ comment.created_by.profile_pic.url }}" alt="{{ comment.created_by.username }}" class="w-100">
+                    {% else %}
+                        <img src="{% static 'images/avatar.svg' %}" alt="{{ comment.created_by.username }}" class="w-100">
+                    {% endif %}
+                    <div class="text-center"><strong class="text-muted text-center" style="font-size: medium;">{{ comment.created_by.username }}</strong></div>
+                    {% if comment.created_by.user_type == 'teacher' %}
+                        <div class="text-center"><small class="text-center text-success">{% if comment.created_by.position %}{{ comment.created_by.position }}{% else %}Teacher{% endif %}</small></div>
+                    {% endif %}
+                </div>
+                <div class="col-11">
+                    <div class="text-muted text-right">{{ comment.modified_date }}</div>
+                    <div style="white-space: pre-line">{{ comment.message }}</div>
+                    {% if forloop.first and topic.document %}
+                        {% if topic.is_document_image %}
+                            <div class="text-center my-3">
+                                <img src="{{ topic.document.url }}" alt="{{ topic.document.url }} class="w-100"></a>
+                            </div>
+                        {% else %}
+                            <div class="my-3">
+                                <a href="{{ topic.document.url }}" class="btn btn-outline-primary" target="_blank">Show supporting document</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if comment.created_by == user %}
+                        {% if not forloop.first %}
+                            <div class="mt-3">
+                                <a href="{% url 'forum:edit_comment' topic.subject.code topic.pk comment.pk %}" class="btn btn-outline-primary btn-sm" role="button"><i class="zmdi zmdi-edit"></i> Edit</a>
+                                <button onclick="confirmDeleteComment({{ comment.pk }})" class="btn btn-outline-danger btn-sm" role="button">Delete <i class="fa fa-trash"></i></button>
+                            </div>
+                        {% endif %}
+                        
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if forloop.first and topic.comments.count > 1 %}
+        <div class="mr-3 mt-3 text-center">
+            <a href="#reply" class="btn btn-success btn-lg" role="button">Post a Reply</a>
+        </div> 
+        <h3 class="ml-5 mt-5 mb-3">Replies:</h3>
+    {% endif %}
+    <script>
+        function confirmDeleteComment(comment_pk) {
+        if (confirm("Are you sure you want to delete this comment?")) {
+        window.location.href = "{% url 'forum:delete_comment' topic.subject.code topic.pk 123 %}".replace(/123/, comment_pk.toString());
+        }
+        
+        }
+    </script>
+{% endfor %}

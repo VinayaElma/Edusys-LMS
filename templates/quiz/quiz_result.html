@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block breadcrumb-content %}
+<li class="list-inline-item active">
+    <a href="{% url 'home'%}">Home</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item active">
+    <a href="{% url 'quiz:quiz_home' %}">Quiz</a>
+</li>
+<li class="list-inline-item seprate">
+    <span>/</span>
+</li>
+<li class="list-inline-item">QuizResult</li>
+{% endblock breadcrumb-content %}
+{% block content %}
+<div class="conatiner">
+    
+    <table class="table">
+        <thead>
+            <tr>
+                
+                <th scope="col">Student</th>
+                <th scope="col">Score( Total Marks = {{qcount}} )</th>
+                                
+            </tr>
+        </thead>
+        <tbody>
+            {% for stud in taken_quizs%}
+            <tr>
+                <td>{{stud.student.user.username}}</th>
+                <td>{{stud.score}}</td>
+               
+                
+                
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td class="bg-light text-center font-italic" colspan="3">None of them attempted the quiz yet.</td>
+            </tr>
+
+            {%endfor%}
+            
+        </tbody>
+    </table>
+</div>
+{% include 'includes/pagination.html' %}
+{% endblock content %}

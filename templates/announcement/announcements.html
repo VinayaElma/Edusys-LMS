@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+
+{% block title %}Announcements{% endblock %}
+
+{% block breadcrumb-content %}
+    <li class="list-inline-item active">
+        <a href="{% url 'home' %}">Home</a>
+    </li>
+    <li class="list-inline-item seprate">
+        <span>/</span>
+    </li>
+    <li class="list-inline-item active">
+        <a href="{% url 'announcements:view_announcements' %}">Announcement</a>
+    </li>
+{% endblock breadcrumb-content %}
+
+
+{% block add-button %}
+    {% if user.user_type == 'teacher' %}
+    <button class="au-btn au-btn-icon au-btn--green" >
+    <i class="zmdi zmdi-plus"></i><a style="color: white" href="{% url 'announcements:new_announcements' %}">Add Announcement</a>
+    </button>
+    {% endif %}
+{% endblock add-button %}
+
+
+
+
+{% block content %}
+    <div style="background-color: #F4F4F4">
+    <div>
+    <h4 class="heading-title p-5" style="text-align: center;font-size: 40px">Announcements</h4>
+    <span style="float: right" class="p-1">
+        <form action="{% url 'announcements:search_results' %}" method="get">
+            <input class="form-control" name="q" type="text" placeholder="Search..." value="{{ request.GET.q }}">
+        </form>
+    </span>
+    </div>
+    <br>
+    <br>
+    {% if request.GET.q %}
+        <h5 class="ml-2 mb-3">Search Results for "{{ request.GET.q }}":</h5>
+    {% endif %}
+    <div class="main-content" style="padding-top: 0px">
+        <div class="section__content section__content--p30">
+                {% for announcement in object_list.all|dictsortreversed:"created_at" %}
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="card-header">
+                            <strong class="card-title">{{ announcement.title }}
+                                <small>
+                                    <span class="badge  float-right mt-1">{{ announcement.created_at }}<br><br>{{ announcement.created_by }}</span>
+                                </small>
+                            </strong>
+                        </div>
+                        <section class="card">
+                            <div class="card-body text-secondary">
+                                <p class="card-text">{{ announcement.description }}</p>
+                                {% if announcement.document %}
+                                <p style="font-size: 13px"><a href="{{ MEDIA_URL }}{{ announcement.get_document_url }}" target="_blank">{{ announcement.doc_name }}</a> </p>
+                                {% endif %}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                    {% empty %}
+                        <div class="alert alert-danger m-2 text-center">
+                            <strong>Sorry, no announcements found</strong>
+                        </div>
+              {% endfor %}
+        </div>
+    </div>
+    </div>
+<div class="p-2" style="float: right">
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock %}
